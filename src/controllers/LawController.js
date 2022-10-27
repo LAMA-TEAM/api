@@ -29,7 +29,10 @@ class LawController {
                 return res.status(200).json({ success: true, message: 'Law found', law, votes: { 0: noVotes, 1: yesVotes } });
             }
 
-            res.status(200).json({ success: true, message: 'Law found', law });
+            // Check if user already voted
+            const vote = await Vote.findOne({ law: id, user: req.user._id });
+
+            res.status(200).json({ success: true, message: 'Law found', law, voted: vote ? true : false });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Server error' });
         }
