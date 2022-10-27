@@ -14,9 +14,14 @@ module.exports = function(app) {
 
     // Law routes
     app.get('/law', LawController.index);
+    app.get('/law/:id', LawController.show);
+    app.post('/law', AuthMiddleware.isAdmin, LawController.store);
+    app.put('/law/:id', AuthMiddleware.isAdmin, LawController.update);
+    app.delete('/law/:id', AuthMiddleware.isAdmin, LawController.destroy);
 
     // Vote routes
     app.get('/vote/:law_id', VoteController.index);
+    app.post('/vote/:law_id', AuthMiddleware.isAuth, VoteController.store);
 
     // Default route
     app.get('*', (req, res) => {
