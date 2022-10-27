@@ -11,8 +11,8 @@ const Vote = new mongoose.Schema({
         ref: 'Law',
     },
     vote: {
-        type: String,
-        enum: ['up', 'down', 'neutral'],
+        type: Number,
+        enum: [0, 1],
         required: true,
     },
 }, {
