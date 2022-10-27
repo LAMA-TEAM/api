@@ -6,7 +6,7 @@ class VoteController {
         const { law_id } = req.params;
 
         try {
-            const votes = await Vote.find({ law: law_id, user: req.user._id });
+            const votes = await Vote.findOne({ law: law_id, user: req.user._id });
 
             res.status(200).json({ success: true, message: 'Votes found', votes });
         } catch (error) {
@@ -20,13 +20,13 @@ class VoteController {
 
         try {
             const law = await Law.findById(law_id);
-
+            
             if (!law) {
                 return res.status(404).json({ success: false, message: 'Law not found' });
             }
-
+            
             const voteExists = await Vote.findOne({ user: req.user._id, law: law_id });
-
+            
             if (voteExists) {
                 return res.status(400).json({ success: false, message: 'You already voted for this law' });
             }
@@ -36,7 +36,7 @@ class VoteController {
                 law: law_id,
                 vote,
             });
-
+            
             await newVote.save();
 
             res.status(201).json({ success: true, message: 'Vote created', vote: newVote });

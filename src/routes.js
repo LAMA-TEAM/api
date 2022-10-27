@@ -13,14 +13,14 @@ module.exports = function(app) {
     app.post('/auth/me', AuthMiddleware.isAuth, UserController.me);
 
     // Law routes
-    app.get('/law', LawController.index);
-    app.get('/law/:id', LawController.show);
+    app.get('/law', AuthMiddleware.isAuth, LawController.index);
+    app.get('/law/:id', AuthMiddleware.isAuth, LawController.show);
     app.post('/law', AuthMiddleware.isAdmin, LawController.store);
     app.put('/law/:id', AuthMiddleware.isAdmin, LawController.update);
     app.delete('/law/:id', AuthMiddleware.isAdmin, LawController.destroy);
 
     // Vote routes
-    app.get('/vote/:law_id', VoteController.index);
+    app.get('/vote/:law_id', AuthMiddleware.isAuth, VoteController.index);
     app.post('/vote/:law_id', AuthMiddleware.isAuth, VoteController.store);
 
     // Default route

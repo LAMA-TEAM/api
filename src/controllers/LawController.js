@@ -1,4 +1,5 @@
 const Law = require('../models/Law');
+const Vote = require('../models/Vote');
 
 class LawController {
     static async index(req, res) {
@@ -18,6 +19,15 @@ class LawController {
             const law = await Law.findById(id);
 
             if (!law) return res.status(404).json({ success: false, message: 'Law not found' });
+
+            if (law.state === 'archived') {
+                const votes = await Vote.find({ law: id });
+
+                const yesVotes = votes.filter(vote => vote.vote === 1).length;
+                const noVotes = votes.filter(vote => vote.vote === 0).length;
+
+                return res.status(200).json({ success: true, message: 'Law found', law, votes: { 0: noVotes, 1: yesVotes } });
+            }
 
             res.status(200).json({ success: true, message: 'Law found', law });
         } catch (error) {
