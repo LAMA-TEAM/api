@@ -34,7 +34,7 @@ class AuthMiddleware {
             try {
                 const token = await jwt.verify(bearerToken, process.env.TOKEN_SECRET);
 
-                const user = await User.findById(token.id);
+                const user = await User.findById(token._id);
 
                 if (user.role === 'admin') {
                     req.user = token;
