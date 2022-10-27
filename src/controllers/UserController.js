@@ -62,7 +62,7 @@ class UserController {
 
             const userData = await User.findById(user._id);
 
-            const { encryptedPassword, ...data } = userData;
+            const { encryptedPassword, ...data } = userData._doc;
 
             res.status(200).json({ success: true, message: 'User found', user: data });
         } catch (error) {
