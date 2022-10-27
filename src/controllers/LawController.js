@@ -20,19 +20,18 @@ class LawController {
 
             if (!law) return res.status(404).json({ success: false, message: 'Law not found' });
 
+            const alreadyVoted = await Vote.find({ user: req.user._id, law: id });
+
             if (law.state === 'archived') {
                 const votes = await Vote.find({ law: id });
 
                 const yesVotes = votes.filter(vote => vote.vote === 1).length;
                 const noVotes = votes.filter(vote => vote.vote === 0).length;
 
-                return res.status(200).json({ success: true, message: 'Law found', law, votes: { 0: noVotes, 1: yesVotes } });
+                return res.status(200).json({ success: true, message: 'Law found', law, votes: { 0: noVotes, 1: yesVotes }, voted: alreadyVoted.length > 0 ? true : false });
             }
 
-            // Check if user already voted
-            const vote = await Vote.findOne({ law: id, user: req.user._id });
-
-            res.status(200).json({ success: true, message: 'Law found', law, voted: vote ? true : false });
+            res.status(200).json({ success: true, message: 'Law found', law, voted: alreadyVoted.length > 0 ? true : false });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Server error' });
         }
