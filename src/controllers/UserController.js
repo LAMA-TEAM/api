@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const User = require('../models/User');
-
+const Token = require('../models/Token');
 class UserController {
     static async register(req, res) {
         const { firstName, lastName, email, password } = req.body;
@@ -48,6 +48,13 @@ class UserController {
             if (!validPassword) return res.status(400).json({ success: false, message: 'Invalid email or password' });
     
             const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+
+            const tokenData = new Token({
+                token,
+                user: user._id,
+            });
+
+            await tokenData.save();
     
             res.status(200).json({ success: true, message: 'Logged in', token });
         } catch (error) {

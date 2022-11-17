@@ -5,6 +5,7 @@ const VoteController = require('./controllers/VoteController');
 
 // Middleware
 const AuthMiddleware = require('./middlewares/AuthMiddleware');
+const limitedCall = require('../middlewares/limitedCall');
 
 module.exports = function(app) {
     // User routes
@@ -13,15 +14,15 @@ module.exports = function(app) {
     app.post('/auth/me', AuthMiddleware.isAuth, UserController.me);
 
     // Law routes
-    app.get('/law', AuthMiddleware.isAuth, LawController.index);
-    app.get('/law/:id', AuthMiddleware.isAuth, LawController.show);
+    app.get('/law', [AuthMiddleware.isAuth, limitedCall], LawController.index);
+    app.get('/law/:id', [AuthMiddleware.isAuth, limitedCall], LawController.show);
     app.post('/law', AuthMiddleware.isAdmin, LawController.store);
     app.put('/law/:id', AuthMiddleware.isAdmin, LawController.update);
     app.delete('/law/:id', AuthMiddleware.isAdmin, LawController.destroy);
 
     // Vote routes
-    app.get('/vote/:law_id', AuthMiddleware.isAuth, VoteController.index);
-    app.post('/vote/:law_id', AuthMiddleware.isAuth, VoteController.store);
+    app.get('/vote/:law_id', [AuthMiddleware.isAuth, limitedCall], VoteController.index);
+    app.post('/vote/:law_id', [AuthMiddleware.isAuth, limitedCall], VoteController.store);
 
     // Default route
     app.get('*', (req, res) => {
