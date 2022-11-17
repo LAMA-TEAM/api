@@ -28,7 +28,7 @@ module.exports = function(app) {
     // Token routes
     app.get('/token', AuthMiddleware.isAuth, TokenController.index);
     app.put('/token/:token', AuthMiddleware.isAuth, TokenController.refreshToken);
-    app.delete('/token/:token', AuthMiddleware.isAuth, TokenController.destroy);
+    app.post('/token/:token', AuthMiddleware.isAuth, TokenController.destroy);
 
     // Default route
     app.get('*', (req, res) => {

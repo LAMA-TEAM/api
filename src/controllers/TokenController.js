@@ -5,7 +5,7 @@ class TokenController {
         const userId = req.user._id;
 
         try {
-            const tokens = await Token.find({ user: userId });
+            const tokens = await Token.find({ user: userId, isActive: true });
 
             return res.status(200).json({ success: true, tokens: tokens });
         } catch (error) {
@@ -37,9 +37,12 @@ class TokenController {
         const { token } = req.params;
 
         try {
-            const isTokenValid = await Token.find({ _id: token, isActive: true, user: req.user});
+            const isTokenValid = await Token.find({ id: token, isActive: true, user: req.user._id});
 
+            console.log(token, req.user._id)
+            console.log(isTokenValid);
             if (isTokenValid.length <= 0) return res.status(401).json({ success: false, message: 'Invalid token' });
+
 
             const updateToken = await Token.findByIdAndUpdate(isTokenValid[0]._id, { isActive: false });
 
