@@ -2,7 +2,7 @@
 const UserController = require('./controllers/UserController');
 const LawController = require('./controllers/LawController');
 const VoteController = require('./controllers/VoteController');
-const TokenController = require('../controllers/TokenController');
+const TokenController = require('./controllers/TokenController');
 
 // Middleware
 const AuthMiddleware = require('./middlewares/AuthMiddleware');
