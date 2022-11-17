@@ -5,7 +5,7 @@ const VoteController = require('./controllers/VoteController');
 
 // Middleware
 const AuthMiddleware = require('./middlewares/AuthMiddleware');
-const limitedCall = require('../middlewares/limitedCall');
+const limitedCall = require('./middlewares/limitedCall');
 
 module.exports = function(app) {
     // User routes
