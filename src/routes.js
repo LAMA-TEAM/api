@@ -2,6 +2,7 @@
 const UserController = require('./controllers/UserController');
 const LawController = require('./controllers/LawController');
 const VoteController = require('./controllers/VoteController');
+const TokenController = require('../controllers/TokenController');
 
 // Middleware
 const AuthMiddleware = require('./middlewares/AuthMiddleware');
@@ -23,6 +24,11 @@ module.exports = function(app) {
     // Vote routes
     app.get('/vote/:law_id', [AuthMiddleware.isAuth, limitedCall], VoteController.index);
     app.post('/vote/:law_id', [AuthMiddleware.isAuth, limitedCall], VoteController.store);
+
+    // Token routes
+    app.get('/token', AuthMiddleware.isAuth, TokenController.index);
+    app.put('/token/:token', AuthMiddleware.isAuth, TokenController.refreshToken);
+    app.delete('/token/:token', AuthMiddleware.isAuth, TokenController.destroy);
 
     // Default route
     app.get('*', (req, res) => {
