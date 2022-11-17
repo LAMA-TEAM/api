@@ -38,11 +38,7 @@ class TokenController {
 
         try {
             const isTokenValid = await Token.find({ id: token, isActive: true, user: req.user._id});
-
-            console.log(token, req.user._id)
-            console.log(isTokenValid);
             if (isTokenValid.length <= 0) return res.status(401).json({ success: false, message: 'Invalid token' });
-
 
             const updateToken = await Token.findByIdAndUpdate(isTokenValid[0]._id, { isActive: false });
 
