@@ -7,7 +7,7 @@ class TokenController {
         try {
             const tokens = await Token.find({ user: userId });
 
-            return res.status(200).json({ success: true, data: tokens });
+            return res.status(200).json({ success: true, tokens: tokens });
         } catch (error) {
             return res.status(500).json({ success: false, message: 'Server error' });
         }
